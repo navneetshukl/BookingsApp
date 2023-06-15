@@ -1,10 +1,10 @@
 package render
 
 import (
-	"bookings-udemy/pkg/config"
-	"bookings-udemy/pkg/models"
 	"bytes"
 	"fmt"
+	"bookings-udemy/pkg/config"
+	"bookings-udemy/pkg/models"
 	"html/template"
 	"log"
 	"net/http"
