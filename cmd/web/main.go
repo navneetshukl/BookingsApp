@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"time"
-
 	"github.com/alexedwards/scs/v2"
 )
 
