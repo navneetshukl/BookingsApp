@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bookings-udemy/internal/handlers"
+	"bookings-udemy/internal/config"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"bookings-udemy/pkg/config"
-	"bookings-udemy/pkg/handlers"
+
 	"net/http"
 )
 
@@ -20,11 +22,9 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/generals-quarters", handlers.Repo.Generals)
 	mux.Get("/majors-suite", handlers.Repo.Majors)
 
-
 	mux.Get("/search-availability", handlers.Repo.Availability)
 	mux.Post("/search-availability", handlers.Repo.PostAvailability)
 	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
-
 
 	mux.Get("/contact", handlers.Repo.Contact)
 

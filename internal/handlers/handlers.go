@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"bookings-udemy/pkg/config"
-	"bookings-udemy/pkg/models"
-	"bookings-udemy/pkg/render"
+	"bookings-udemy/internal/config"
+	"bookings-udemy/internal/models"
+	"bookings-udemy/internal/render"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -99,7 +99,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	w.Header().Set("Content-Type","application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
 
 }
