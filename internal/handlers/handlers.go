@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bookings-udemy/internal/config"
+	"bookings-udemy/internal/forms"
 	"bookings-udemy/internal/models"
 	"bookings-udemy/internal/render"
 	"encoding/json"
@@ -55,7 +56,14 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the make a reservation page and displays form
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// PostReservation Handles the posting of a reservation form
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // Generals renders the room page
