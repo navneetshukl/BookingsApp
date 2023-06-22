@@ -1,9 +1,11 @@
 package main
 
 import (
-	"bookings-udemy/internal/handlers"
-	"bookings-udemy/internal/render"
 	"bookings-udemy/internal/config"
+	"bookings-udemy/internal/handlers"
+	"bookings-udemy/internal/models"
+	"bookings-udemy/internal/render"
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -19,6 +21,11 @@ var session *scs.SessionManager
 
 // main is the main function
 func main() {
+
+	// What am I going to put in Session
+
+	gob.Register(models.Reservation{})
+
 	// change this to true when in production
 	app.InProduction = false
 
