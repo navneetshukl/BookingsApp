@@ -2,6 +2,7 @@ package main
 
 import (
 	"bookings-udemy/internal/config"
+	"bookings-udemy/internal/driver"
 	"bookings-udemy/internal/handlers"
 	"bookings-udemy/internal/helpers"
 	"bookings-udemy/internal/models"
@@ -23,15 +24,14 @@ var session *scs.SessionManager
 var infoLog *log.Logger
 var errorLog *log.Logger
 
-
 // main is the main function
 func main() {
 
-	err:=run()
-	if err!=nil{
+	db,err := run()
+	if err != nil {
 		log.Fatal(err)
 	}
-
+	defer db.SQL.Close()
 
 	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
 
@@ -46,7 +46,7 @@ func main() {
 	}
 }
 
-func run() error{
+func run() (*driver.DB,error) {
 	// What am I going to put in Session
 
 	gob.Register(models.Reservation{})
@@ -54,11 +54,11 @@ func run() error{
 	// change this to true when in production
 	app.InProduction = false
 
-	infoLog=log.New(os.Stdout,"INFO\t",log.Ldate|log.Ltime)
-	app.InfoLog=infoLog
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
 
-	errorLog=log.New(os.Stdout,"ERROR\t",log.Ldate|log.Ltime|log.Lshortfile)
-	app.ErrorLog=errorLog
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
 
 	// set up the session
 	session = scs.New()
@@ -69,20 +69,30 @@ func run() error{
 
 	app.Session = session
 
+	// connect to database
+
+	log.Println("Connecting to Database")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=postgres password=password")
+	if err!= nil{
+		log.Fatal("Cannot connect to database ! Dying...")
+	}
+	log.Println("Connected to Database!")
+	
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil,err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app,db)
 	handlers.NewHandlers(repo)
 
 	render.NewTemplates(&app)
 	helpers.NewHelpers(&app)
-	return nil
+	return db,nil
 
 }

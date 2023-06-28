@@ -2,10 +2,13 @@ package handlers
 
 import (
 	"bookings-udemy/internal/config"
+	"bookings-udemy/internal/driver"
 	"bookings-udemy/internal/forms"
 	"bookings-udemy/internal/helpers"
 	"bookings-udemy/internal/models"
 	"bookings-udemy/internal/render"
+	"bookings-udemy/internal/repository"
+	"bookings-udemy/internal/repository/dbrepo"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -17,12 +20,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
