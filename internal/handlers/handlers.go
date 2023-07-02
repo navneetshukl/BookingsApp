@@ -155,6 +155,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err=m.DB.InsertRoomRestriction(restriction)
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
