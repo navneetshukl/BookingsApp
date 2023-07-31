@@ -14,7 +14,7 @@ type User struct {
 	Email       string
 	Password    string
 	AccessLevel int
-	Created     time.Time
+	CreatedAt     time.Time
 	UpdatedAt   time.Time
 }
 
